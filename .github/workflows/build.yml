@@ -169,10 +169,15 @@ jobs:
             EXISTING_TAGS=$(curl -s -H "Authorization: JWT $TOKEN" \
               "https://hub.docker.com/v2/repositories/$DOCKER_USERNAME/$SERVICE_NAME/tags?page_size=100" \
               | jq -r '.results[].name')
-            LATEST_TAG=$(echo "$EXISTING_TAGS" \
-              | grep "^${BRANCH}-${COMMIT_HASH}" || true \
-              | sort -V \
-              | tail -n 1)
+            # Filter out architecture-specific tags (-amd64, -arm64) and get base tag only
+            # First try exact match, then filter architecture-specific tags
+            LATEST_TAG=$(echo "$EXISTING_TAGS" | grep "^${BRANCH}-${COMMIT_HASH}$" | head -n 1)
+            if [ -z "$LATEST_TAG" ]; then
+              LATEST_TAG=$(echo "$EXISTING_TAGS" \
+                | grep "^${BRANCH}-${COMMIT_HASH}" \
+                | grep -vE '-(amd64|arm64)$' \
+                | head -n 1)
+            fi
             NEXT_TAG="${LATEST_TAG:-${BRANCH}-${COMMIT_HASH}}"
           fi
 
