@@ -7,11 +7,14 @@ module.exports = {
   // mode: 'development',
   entry: "./src/index.js",
   devtool: "none",
+  externals: {
+    "@tanstack/react-query": "@tanstack/react-query"
+  },
   module: {
     rules: [
       {
         test: /\.(js)$/,
-        exclude: /node_modules/,
+        exclude: /node_modules\/(?!(react-i18next)\/).*/,
         use: {
           loader: "babel-loader",
           options: {
