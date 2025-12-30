@@ -34,33 +34,19 @@ function cleanStyles() {
 function styles() {
   const plugins = [
     require("postcss-import"),
+    require("postcss-nested"),
     require("tailwindcss"),
     postcssPresetEnv({ stage: 2, autoprefixer: { cascade: false }, features: { "custom-properties": true } }),
     require("autoprefixer"),
     require("cssnano"),
     header({ header: headerString }),
   ];
-  // First compile SCSS to CSS with sass (handles SCSS syntax and resolves local imports)
-  // Then process with PostCSS (resolves tailwindcss imports and applies plugins)
+  // Process with PostCSS (with postcss-scss parser to handle SCSS syntax)
+  // postcss-import resolves tailwindcss imports
+  // postcss-nested handles SCSS nesting
+  // No need for sass() since PostCSS handles everything
   return src("src/index.scss")
-    .pipe(sass({
-      includePaths: ['node_modules'],
-      importer: [
-        function(url, prev) {
-          // Handle tailwindcss imports
-          if (url.startsWith('tailwindcss/')) {
-            const tailwindPath = url.replace('tailwindcss/', '');
-            try {
-              return { file: require.resolve(`tailwindcss/${tailwindPath}.css`) };
-            } catch (e) {
-              return null;
-            }
-          }
-          return null;
-        }
-      ]
-    }).on('error', sass.logError))
-    .pipe(postcss(plugins))
+    .pipe(postcss(plugins, { parser: require("postcss-scss") }))
     .pipe(dest(output));
 }
 
