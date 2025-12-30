@@ -13,9 +13,9 @@ RUN apt-get update && \
     && rm -rf /var/lib/apt/lists/*
 
 # Ensure "python" resolves to python2 and force npm/node-gyp to use it
+# Note: PYTHON env var is used by node-gyp in Node.js 20, npm config python is deprecated
 RUN ln -sf /usr/bin/python2 /usr/bin/python
 ENV PYTHON=/usr/bin/python
-RUN npm config set python /usr/bin/python
 
 ARG WORK_DIR
 WORKDIR /app
