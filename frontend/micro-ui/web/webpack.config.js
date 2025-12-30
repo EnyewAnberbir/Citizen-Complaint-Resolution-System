@@ -55,6 +55,7 @@ module.exports = {
     publicPath: "/digit-ui/",
   },
   optimization: {
+    minimize: false,
     splitChunks: {
       chunks: 'all',
       minSize:20000,
