@@ -47,6 +47,7 @@ function styles() {
   // No need for sass() since PostCSS handles everything
   return src("src/index.scss")
     .pipe(postcss(plugins, { parser: require("postcss-scss") }))
+    .pipe(rename("index.css"))
     .pipe(dest(output));
 }
 
