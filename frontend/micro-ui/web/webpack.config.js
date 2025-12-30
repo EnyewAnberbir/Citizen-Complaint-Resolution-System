@@ -14,7 +14,7 @@ module.exports = {
     rules: [
       {
         test: /\.(js)$/,
-        exclude: /node_modules\/(?!(react-i18next)\/).*/,
+        exclude: /node_modules\/(?!(react-i18next|@egovernments)\/).*/,
         use: {
           loader: "babel-loader",
           options: {
