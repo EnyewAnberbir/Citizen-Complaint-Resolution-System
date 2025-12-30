@@ -40,11 +40,7 @@ function styles() {
     require("cssnano"),
     header({ header: headerString }),
   ];
-  // First compile SCSS to CSS with sass(), then process with postcss
-  return src("src/index.scss")
-    .pipe(sass({ outputStyle: 'expanded' }).on('error', sass.logError))
-    .pipe(postcss(plugins))
-    .pipe(dest(output));
+  return src("src/index.scss").pipe(postcss(plugins)).pipe(sass().on('error', sass.logError)).pipe(dest(output));
 }
 
 function minify() {
