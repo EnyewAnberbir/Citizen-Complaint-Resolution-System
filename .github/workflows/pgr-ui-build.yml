@@ -106,12 +106,13 @@ jobs:
               | jq -r '.results[].name')
             # Filter out architecture-specific tags (-amd64, -arm64) and get base tag only
             # First try exact match, then filter architecture-specific tags
-            LATEST_TAG=$(echo "$EXISTING_TAGS" | grep "^${BRANCH}-${COMMIT_HASH}$" | head -n 1)
+            # Use || true to prevent grep from causing script exit when no match found
+            LATEST_TAG=$(echo "$EXISTING_TAGS" | grep "^${BRANCH}-${COMMIT_HASH}$" | head -n 1 || true)
             if [ -z "$LATEST_TAG" ]; then
               LATEST_TAG=$(echo "$EXISTING_TAGS" \
                 | grep "^${BRANCH}-${COMMIT_HASH}" \
                 | grep -vE '-(amd64|arm64)$' \
-                | head -n 1)
+                | head -n 1 || true)
             fi
             NEXT_TAG="${LATEST_TAG:-${BRANCH}-${COMMIT_HASH}}"
           fi
