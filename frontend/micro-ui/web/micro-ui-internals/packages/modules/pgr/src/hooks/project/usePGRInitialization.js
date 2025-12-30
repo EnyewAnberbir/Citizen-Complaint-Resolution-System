@@ -1,8 +1,11 @@
 import initializePGRModule from "../../services/PGRInitialization";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 
 const usePGRInitialization = ({tenantId}) => {
-  return useQuery(["PGR_INITIALIZATION",], () => initializePGRModule({tenantId}));
+  return useQuery({
+    queryKey: ["PGR_INITIALIZATION"],
+    queryFn: () => initializePGRModule({tenantId})
+  });
 };
 
 export default usePGRInitialization;

@@ -12,7 +12,7 @@ import { complaintsLocation } from "../../citizen/Create/steps-config/Complaints
 import { pinComplaintLocaton } from "../../citizen/Create/steps-config/pinComplaintLocaton";
 import { additionalDetails } from "../../citizen/Create/steps-config/additionalDetails";
 import { locationDetails } from "../../citizen/Create/steps-config/locationDetails";
-import { useQueryClient } from "react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { useHistory, useRouteMatch, useParams } from "react-router-dom";
 
 const configs = [

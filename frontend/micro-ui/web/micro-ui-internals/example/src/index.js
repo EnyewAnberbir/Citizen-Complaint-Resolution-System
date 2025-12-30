@@ -1,39 +1,27 @@
-import React, { Suspense } from "react";
-import ReactDOM from "react-dom";
+import React, { useEffect, useState, lazy, Suspense } from "react";
+import ReactDOM from "react-dom/client";
+import { Hooks } from "@egovernments/digit-ui-libraries";
 import { PGRReducers } from "@egovernments/digit-ui-module-ccrs";
 import { initLibraries } from "@egovernments/digit-ui-libraries";
-// import { paymentConfigs, PaymentLinks, PaymentModule } from "@egovernments/digit-ui-module-common";
 import "@egovernments/digit-ui-health-css/example/index.css";
 import { Loader } from "@egovernments/digit-ui-components";
 
 import { UICustomizations } from "./UICustomizations";
 import { pgrCustomizations, pgrComponents } from "./pgr";
-import { initWorkbenchComponents } from "@egovernments/digit-ui-module-workbench";
-import { initHRMSComponents } from "@egovernments/digit-ui-module-hrms";
 
-var Digit = window.Digit || {};
+window.Digit = window.Digit || {};
+window.Digit.Hooks = Hooks;
 
-// Lazy load DigitUI
-const DigitUI = React.lazy(() =>
-  import("@egovernments/digit-ui-module-core").then((mod) => ({
-    default: mod.DigitUI,
-  }))
-);
-const enabledModules = [
-  "Utilities",
-  "PGR",
-  "Workbench",
-  "HRMS",
-];
+const DigitUILazy = lazy(() => import("@egovernments/digit-ui-module-core").then((module) => ({ default: module.DigitUI })));
+
+const enabledModules = ["Utilities", "PGR", "Workbench", "HRMS"];
 
 const initTokens = (stateCode) => {
   const userType = window.sessionStorage.getItem("userType") || process.env.REACT_APP_USER_TYPE || "CITIZEN";
   const token = window.localStorage.getItem("token") || process.env[`REACT_APP_${userType}_TOKEN`];
 
   const citizenInfo = window.localStorage.getItem("Citizen.user-info");
-
   const citizenTenantId = window.localStorage.getItem("Citizen.tenant-id") || stateCode;
-
   const employeeInfo = window.localStorage.getItem("Employee.user-info");
   const employeeTenantId = window.localStorage.getItem("Employee.tenant-id");
 
@@ -42,67 +30,99 @@ const initTokens = (stateCode) => {
   window.Digit.SessionStorage.set("userType", userTypeInfo);
 
   if (userType !== "CITIZEN") {
-    window.Digit.SessionStorage.set("User", { access_token: token, info: userType !== "CITIZEN" ? JSON.parse(employeeInfo) : citizenInfo });
-  } else {
-    // if (!window.Digit.SessionStorage.get("User")?.extraRoleInfo) window.Digit.SessionStorage.set("User", { access_token: token, info: citizenInfo });
+    window.Digit.SessionStorage.set("User", {
+      access_token: token,
+      info: userType !== "CITIZEN" ? JSON.parse(employeeInfo) : citizenInfo,
+    });
   }
 
   window.Digit.SessionStorage.set("Citizen.tenantId", citizenTenantId);
 
-  if (employeeTenantId && employeeTenantId.length) window.Digit.SessionStorage.set("Employee.tenantId", employeeTenantId);
+  if (employeeTenantId && employeeTenantId.length) {
+    window.Digit.SessionStorage.set("Employee.tenantId", employeeTenantId);
+  }
 };
 
-const initDigitUI = async () => {
+const initDigitUI = () => {
   window.contextPath = window?.globalConfigs?.getConfig("CONTEXT_PATH") || "digit-ui";
+
   window.Digit.Customizations = {
     commonUiConfig: UICustomizations,
     PGR: pgrCustomizations,
   };
   window?.Digit.ComponentRegistryService.setupRegistry({
     ...pgrComponents,
-    // PaymentModule,
-    // ...paymentConfigs,
-    // PaymentLinks,
   });
-  // initUtilitiesComponents();
-  // initPGRComponents();
 
+  const stateCode = window?.globalConfigs?.getConfig("STATE_LEVEL_TENANT_ID") || "pb";
+  const root = ReactDOM.createRoot(document.getElementById("root"));
+  root.render(<MainApp stateCode={stateCode} enabledModules={enabledModules} />);
+};
 
+const MainApp = ({ stateCode, enabledModules }) => {
+  const [isReady, setIsReady] = useState(false);
+  const [loaded, setLoaded] = useState(false);
 
-  // Dynamically import and register modules after initLibraries
-  const [
-    { initUtilitiesComponents },
-    { initPGRComponents },
-    // {initWorkbenchComponents},
-    // {initHRMSComponents}
-  ] = await Promise.all([
-    import("@egovernments/digit-ui-module-utilities"),
-    import("@egovernments/digit-ui-module-ccrs"),
-    // import("@egovernments/digit-ui-module-workbench"),
-    // import("@egovernments/digit-ui-module-hrms"),
+  useEffect(() => {
+    initLibraries().then(async () => {
+      const [
+        { initUtilitiesComponents },
+        { initPGRComponents },
+      ] = await Promise.all([
+        import("@egovernments/digit-ui-module-utilities"),
+        import("@egovernments/digit-ui-module-ccrs"),
+      ]);
 
-  ]);
+      initUtilitiesComponents();
+      initPGRComponents();
 
-  // Initialize them in safe order
-  initUtilitiesComponents();
-  initPGRComponents();
-  initWorkbenchComponents();
-  initHRMSComponents();
+      // Initialize workbench and HRMS if available
+      try {
+        const { initWorkbenchComponents } = await import("@egovernments/digit-ui-module-workbench");
+        initWorkbenchComponents();
+      } catch (e) {
+        console.warn("Workbench module not available:", e);
+      }
 
+      try {
+        const { initHRMSComponents } = await import("@egovernments/digit-ui-module-hrms");
+        initHRMSComponents();
+      } catch (e) {
+        console.warn("HRMS module not available:", e);
+      }
 
+      setIsReady(true);
+    });
+  }, []);
 
+  useEffect(() => {
+    if (isReady) {
+      initTokens(stateCode);
+      setLoaded(true);
+    }
+  }, [stateCode, isReady]);
+
+  if (!loaded) {
+    return <div>Loading...</div>;
+  }
 
   const moduleReducers = (initData) => ({
     pgr: PGRReducers(initData),
   });
-  const stateCode = window?.globalConfigs?.getConfig("STATE_LEVEL_TENANT_ID") || "pb";
-  initTokens(stateCode);
 
-  ReactDOM.render(<Suspense fallback={<Loader page={true} variant={"PageLoader"} />}>
-    <DigitUI stateCode={stateCode} enabledModules={enabledModules} defaultLanding="employee" moduleReducers={moduleReducers} />
-  </Suspense>, document.getElementById("root"));
+  return (
+    <Suspense fallback={<Loader page={true} variant={"PageLoader"} />}>
+      {window.Digit && (
+        <DigitUILazy
+          stateCode={stateCode}
+          enabledModules={enabledModules}
+          allowedUserTypes={["employee", "citizen"]}
+          defaultLanding="employee"
+          moduleReducers={moduleReducers}
+        />
+      )}
+    </Suspense>
+  );
 };
 
-initLibraries().then(() => {
-  initDigitUI();
-});
+initDigitUI();

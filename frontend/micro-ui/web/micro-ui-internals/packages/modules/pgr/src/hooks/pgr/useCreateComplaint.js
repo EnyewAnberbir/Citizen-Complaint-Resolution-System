@@ -1,8 +1,11 @@
-import { useQuery, useMutation } from "react-query";
+import { useMutation } from "@tanstack/react-query";
 import PGRService from "../../services/pgr/PGRService";
 
 export const useCreateComplaint = (tenantId, config = {}) => {
-  return useMutation((data) => PGRService.create(data, tenantId));
+  return useMutation({
+    mutationFn: (data) => PGRService.create(data, tenantId),
+    ...config
+  });
 };
 
 export default useCreateComplaint;
