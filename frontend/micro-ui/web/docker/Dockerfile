@@ -1,4 +1,4 @@
-FROM node:14-bullseye-slim AS build
+FROM node:20-bullseye-slim AS build
 
 # Install runtime/build deps: python2 (if node-sass/native modules need it),
 # build-essential (gcc/g++/make), git and ca-certificates.
