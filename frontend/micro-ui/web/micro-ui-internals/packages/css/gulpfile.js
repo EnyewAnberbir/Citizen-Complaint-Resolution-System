@@ -40,7 +40,28 @@ function styles() {
     require("cssnano"),
     header({ header: headerString }),
   ];
-  return src("src/index.scss").pipe(postcss(plugins)).pipe(sass().on('error', sass.logError)).pipe(dest(output));
+  // First compile SCSS to CSS with sass (handles SCSS syntax and resolves local imports)
+  // Then process with PostCSS (resolves tailwindcss imports and applies plugins)
+  return src("src/index.scss")
+    .pipe(sass({
+      includePaths: ['node_modules'],
+      importer: [
+        function(url, prev) {
+          // Handle tailwindcss imports
+          if (url.startsWith('tailwindcss/')) {
+            const tailwindPath = url.replace('tailwindcss/', '');
+            try {
+              return { file: require.resolve(`tailwindcss/${tailwindPath}.css`) };
+            } catch (e) {
+              return null;
+            }
+          }
+          return null;
+        }
+      ]
+    }).on('error', sass.logError))
+    .pipe(postcss(plugins))
+    .pipe(dest(output));
 }
 
 function minify() {
