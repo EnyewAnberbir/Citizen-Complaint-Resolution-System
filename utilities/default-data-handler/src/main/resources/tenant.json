@@ -1,0 +1,17 @@
+{
+  "id": "{tenantid}",
+  "code": "{tenantid}",
+  "name": "Test Tenant",
+  "email": "test.tenant@gmail.com",
+  "additionalAttributes": {
+    "region": "North",
+    "priority": "High"
+  },
+  "isActive": true,
+  "auditDetails": {
+    "createdBy": "admin",
+    "lastModifiedBy": "admin",
+    "createdTime": 1625151600000,
+    "lastModifiedTime": 1627757200000
+  }
+}

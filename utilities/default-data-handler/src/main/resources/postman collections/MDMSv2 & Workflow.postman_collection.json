@@ -1,0 +1,622 @@
+{
+	"info": {
+		"_postman_id": "571f8522-7ea0-4559-81c3-b1957aa53ce9",
+		"name": "MDMSv2 & Workflow",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "20639397",
+		"_collection_link": "https://egov-impl.postman.co/workspace/eGovernments~d979de3f-e9cc-4dbe-8bf9-9742e0a8cd78/collection/20639397-571f8522-7ea0-4559-81c3-b1957aa53ce9?action=share&source=collection_link&creator=20639397"
+	},
+	"item": [
+		{
+			"name": "Workflow",
+			"item": [
+				{
+					"name": "Create Workflow",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"RequestInfo\": {\n        \"apiId\": \"Rainmaker\",\n        \"action\": \"\",\n        \"did\": 1,\n        \"key\": \"\",\n        \"msgId\": \"20170310130900|en_IN\",\n        \"requesterId\": \"\",\n        \"ts\": 1513579888683,\n        \"ver\": \".01\",\n        // Auth token and userInfo comes directly from Employee Auth Token API\n        \"authToken\": \"{{authToken}}\",\n        \"userInfo\": {{userReqInfo}}\n    },\n    \"BusinessServices\": [\n        {\n            \"tenantId\": \"{{stateTenant}}\",\n            \"businessService\": \"PGR\",\n            \"business\": \"pgr-services\",\n            \"businessServiceSla\": 432000000,\n            \"states\": [\n                {\n                    \"sla\": null,\n                    \"state\": null,\n                    \"applicationStatus\": null,\n                    \"docUploadRequired\": false,\n                    \"isStartState\": true,\n                    \"isTerminateState\": false,\n                    \"isStateUpdatable\": true,\n                    \"actions\": [\n                        {\n                            \"action\": \"APPLY\",\n                            \"nextState\": \"PENDINGFORASSIGNMENT\",\n                            \"roles\": [\n                                \"CITIZEN\",\n                                \"CSR\"\n                            ]\n                        }\n                    ]\n                },\n                {\n                    \"sla\": null,\n                    \"state\": \"PENDINGFORASSIGNMENT\",\n                    \"applicationStatus\": \"PENDINGFORASSIGNMENT\",\n                    \"docUploadRequired\": false,\n                    \"isStartState\": false,\n                    \"isTerminateState\": false,\n                    \"isStateUpdatable\": false,\n                    \"actions\": [\n                        {\n                            \"action\": \"ASSIGN\",\n                            \"nextState\": \"PENDINGATLME\",\n                            \"roles\": [\n                                \"GRO\",\n                                \"DGRO\"\n                            ]\n                        },\n                        {\n                            \"action\": \"REJECT\",\n                            \"nextState\": \"REJECTED\",\n                            \"roles\": [\n                                \"GRO\",\n                                \"DGRO\"\n                            ]\n                        }\n                    ]\n                },\n                {\n                    \"sla\": null,\n                    \"state\": \"PENDINGFORREASSIGNMENT\",\n                    \"applicationStatus\": \"PENDINGFORREASSIGNMENT\",\n                    \"docUploadRequired\": false,\n                    \"isStartState\": false,\n                    \"isTerminateState\": false,\n                    \"isStateUpdatable\": false,\n                    \"actions\": [\n                        {\n                            \"action\": \"ASSIGN\",\n                            \"nextState\": \"PENDINGATLME\",\n                            \"roles\": [\n                                \"GRO\",\n                                \"DGRO\"\n                            ]\n                        },\n                        {\n                            \"action\": \"REJECT\",\n                            \"nextState\": \"REJECTED\",\n                            \"roles\": [\n                                \"GRO\",\n                                \"DGRO\"\n                            ]\n                        }\n                    ]\n                },\n                {\n                    \"sla\": 259200000,\n                    \"state\": \"PENDINGATLME\",\n                    \"applicationStatus\": \"PENDINGATLME\",\n                    \"docUploadRequired\": false,\n                    \"isStartState\": false,\n                    \"isTerminateState\": false,\n                    \"isStateUpdatable\": false,\n                    \"actions\": [\n                        {\n                            \"action\": \"RESOLVE\",\n                            \"nextState\": \"RESOLVED\",\n                            \"roles\": [\n                                \"PGR_LME\"\n                            ]\n                        },\n                        {\n                            \"action\": \"REASSIGN\",\n                            \"nextState\": \"PENDINGFORREASSIGNMENT\",\n                            \"roles\": [\n                                \"PGR_LME\"\n                            ]\n                        }\n                    ]\n                },\n                {\n                    \"sla\": null,\n                    \"state\": \"REJECTED\",\n                    \"applicationStatus\": \"REJECTED\",\n                    \"isStateUpdatable\": false,\n                    \"docUploadRequired\": false,\n                    \"isStartState\": false,\n                    \"isTerminateState\": true,\n                    \"actions\": [\n                        {\n                            \"action\": \"REOPEN\",\n                            \"nextState\": \"PENDINGFORASSIGNMENT\",\n                            \"roles\": [\n                                \"CFC\",\n                                \"CSR\",\n                                \"CITIZEN\"\n                            ]\n                        },\n                        {\n                            \"action\": \"RATE\",\n                            \"nextState\": \"CLOSEDAFTERREJECTION\",\n                            \"roles\": [\n                                \"CFC\",\n                                \"CITIZEN\"\n                            ]\n                        }\n                    ]\n                },\n                {\n                    \"sla\": null,\n                    \"state\": \"RESOLVED\",\n                    \"applicationStatus\": \"RESOLVED\",\n                    \"isStateUpdatable\": false,\n                    \"docUploadRequired\": false,\n                    \"isStartState\": false,\n                    \"isTerminateState\": true,\n                    \"actions\": [\n                        {\n                            \"action\": \"REOPEN\",\n                            \"nextState\": \"PENDINGFORASSIGNMENT\",\n                            \"roles\": [\n                                \"CFC\",\n                                \"CSR\",\n                                \"CITIZEN\"\n                            ]\n                        },\n                        {\n                            \"action\": \"RATE\",\n                            \"nextState\": \"CLOSEDAFTERRESOLUTION\",\n                            \"roles\": [\n                                \"CFC\",\n                                \"CITIZEN\"\n                            ]\n                        }\n                    ]\n                },\n                {\n                    \"sla\": null,\n                    \"state\": \"CLOSEDAFTERREJECTION\",\n                    \"applicationStatus\": \"CLOSEDAFTERREJECTION\",\n                    \"isStateUpdatable\": false,\n                    \"docUploadRequired\": false,\n                    \"isStartState\": false,\n                    \"isTerminateState\": true\n                },\n                {\n                    \"sla\": null,\n                    \"state\": \"CLOSEDAFTERRESOLUTION\",\n                    \"applicationStatus\": \"CLOSEDAFTERRESOLUTION\",\n                    \"isStateUpdatable\": false,\n                    \"docUploadRequired\": false,\n                    \"isStartState\": false,\n                    \"isTerminateState\": true\n                }\n            ]\n        }\n    ]\n}"
+						},
+						"url": {
+							"raw": "{{url}}/egov-workflow-v2/egov-wf/businessservice/_create",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"egov-workflow-v2",
+								"egov-wf",
+								"businessservice",
+								"_create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Workflow",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"RequestInfo\": {\n        \"apiId\": \"Rainmaker\",\n        \"action\": \"\",\n        \"did\": 1,\n        \"key\": \"\",\n        \"msgId\": \"20170310130900|en_IN\",\n        \"requesterId\": \"\",\n        \"ts\": 1513579888683,\n        \"ver\": \".01\",\n        // Auth token and userInfo comes directly from Employee Auth Token API\n        \"authToken\": \"{{authToken}}\",\n        \"userInfo\": {{userReqInfo}}\n    },\n    \"BusinessServices\": [\n        {\n            \"tenantId\": \"pg\",\n            \"businessService\": \"PGR\",\n            \"business\": \"pgr-services\",\n            \"businessServiceSla\": 432000000,\n            \"states\": [\n                {\n                    \"tenantId\": \"pg\",\n                    \"sla\": null,\n                    \"state\": null,\n                    \"applicationStatus\": null,\n                    \"docUploadRequired\": false,\n                    \"isStartState\": true,\n                    \"isTerminateState\": false,\n                    \"isStateUpdatable\": true,\n                    \"actions\": [\n                        {\n                            \"tenantId\": \"pg\",\n                            \"currentState\": null,\n                            \"action\": \"APPLY\",\n                            \"nextState\": \"PENDINGFORASSIGNMENT\",\n                            \"roles\": [\n                                \"CITIZEN\",\n                                \"CSR\"\n                            ],\n                            \"active\": true\n                        }\n                    ]\n                },\n                {\n                    \"tenantId\": \"pg\",\n                    \"sla\": null,\n                    \"state\": \"PENDINGFORASSIGNMENT\",\n                    \"applicationStatus\": \"PENDINGFORASSIGNMENT\",\n                    \"docUploadRequired\": false,\n                    \"isStartState\": false,\n                    \"isTerminateState\": false,\n                    \"isStateUpdatable\": false,\n                    \"actions\": [\n                        {\n                            \"tenantId\": \"pg\",\n                            \"currentState\": \"PENDINGFORASSIGNMENT\",\n                            \"action\": \"ASSIGNEDBYAUTOESCALATION\",\n                            \"nextState\": \"PENDINGATLME\",\n                            \"roles\": [\n                                \"AUTO_ESCALATE\"\n                            ],\n                            \"active\": true\n                        },\n                        {\n                            \"tenantId\": \"pg\",\n                            \"currentState\": \"PENDINGFORASSIGNMENT\",\n                            \"action\": \"COMMENT\",\n                            \"nextState\": \"PENDINGFORASSIGNMENT\",\n                            \"roles\": [\n                                \"CITIZEN\"\n                            ],\n                            \"active\": true\n                        },\n                        {\n                            \"tenantId\": \"pg\",\n                            \"currentState\": \"PENDINGFORASSIGNMENT\",\n                            \"action\": \"ASSIGN\",\n                            \"nextState\": \"PENDINGATLME\",\n                            \"roles\": [\n                                \"GRO\",\n                                \"DGRO\"\n                            ],\n                            \"active\": true\n                        },\n                        {\n                            \"tenantId\": \"pg\",\n                            \"currentState\": \"PENDINGFORASSIGNMENT\",\n                            \"action\": \"REJECT\",\n                            \"nextState\": \"REJECTED\",\n                            \"roles\": [\n                                \"GRO\",\n                                \"DGRO\"\n                            ],\n                            \"active\": true\n                        }\n                    ]\n                },\n                {\n                    \"tenantId\": \"pg\",\n                    \"sla\": 300000,\n                    \"state\": \"PENDINGFORREASSIGNMENT\",\n                    \"applicationStatus\": \"PENDINGFORREASSIGNMENT\",\n                    \"docUploadRequired\": false,\n                    \"isStartState\": false,\n                    \"isTerminateState\": false,\n                    \"isStateUpdatable\": false,\n                    \"actions\": [\n                        {\n                            \"tenantId\": \"pg\",\n                            \"currentState\": \"PENDINGFORREASSIGNMENT\",\n                            \"action\": \"COMMENT\",\n                            \"nextState\": \"PENDINGFORREASSIGNMENT\",\n                            \"roles\": [\n                                \"CITIZEN\"\n                            ],\n                            \"active\": true\n                        },\n                        {\n                            \"tenantId\": \"pg\",\n                            \"currentState\": \"PENDINGFORREASSIGNMENT\",\n                            \"action\": \"REJECT\",\n                            \"nextState\": \"REJECTED\",\n                            \"roles\": [\n                                \"GRO\",\n                                \"DGRO\"\n                            ],\n                            \"active\": true\n                        },\n                        {\n                            \"tenantId\": \"pg\",\n                            \"currentState\": \"PENDINGFORREASSIGNMENT\",\n                            \"action\": \"ASSIGN\",\n                            \"nextState\": \"PENDINGATLME\",\n                            \"roles\": [\n                                \"GRO\",\n                                \"DGRO\"\n                            ],\n                            \"active\": true\n                        }\n                    ]\n                },\n                {\n                    \"tenantId\": \"pg\",\n                    \"sla\": 300000,\n                    \"state\": \"PENDINGATLME\",\n                    \"applicationStatus\": \"PENDINGATLME\",\n                    \"docUploadRequired\": false,\n                    \"isStartState\": false,\n                    \"isTerminateState\": false,\n                    \"isStateUpdatable\": false,\n                    \"actions\": [\n                        {\n                            \"tenantId\": \"pg\",\n                            \"currentState\": \"PENDINGATLME\",\n                            \"action\": \"REASSIGN\",\n                            \"nextState\": \"PENDINGFORREASSIGNMENT\",\n                            \"roles\": [\n                                \"PGR_LME\"\n                            ],\n                            \"active\": true\n                        },\n                        {\n                            \"tenantId\": \"pg\",\n                            \"currentState\": \"PENDINGATLME\",\n                            \"action\": \"COMMENT\",\n                            \"nextState\": \"PENDINGATLME\",\n                            \"roles\": [\n                                \"CITIZEN\"\n                            ],\n                            \"active\": true\n                        },\n                        {\n                            \"tenantId\": \"pg\",\n                            \"currentState\": \"PENDINGATLME\",\n                            \"action\": \"RESOLVE\",\n                            \"nextState\": \"RESOLVED\",\n                            \"roles\": [\n                                \"PGR_LME\"\n                            ],\n                            \"active\": true\n                        },\n                        {\n                            \"tenantId\": \"pg\",\n                            \"currentState\": \"PENDINGATLME\",\n                            \"action\": \"FORWARD\",\n                            \"nextState\": \"PENDINGATSUPERVISOR\",\n                            \"roles\": [\n                                \"AUTO_ESCALATE\"\n                            ],\n                            \"active\": true\n                        }\n                    ]\n                },\n                {\n                    \"tenantId\": \"pg\",\n                    \"sla\": 300000,\n                    \"state\": \"REJECTED\",\n                    \"applicationStatus\": \"REJECTED\",\n                    \"docUploadRequired\": false,\n                    \"isStartState\": false,\n                    \"isTerminateState\": true,\n                    \"isStateUpdatable\": false,\n                    \"actions\": [\n                        {\n                            \"tenantId\": \"pg\",\n                            \"currentState\": \"REJECTED\",\n                            \"action\": \"COMMENT\",\n                            \"nextState\": \"REJECTED\",\n                            \"roles\": [\n                                \"CITIZEN\"\n                            ],\n                            \"active\": true\n                        },\n                        {\n                            \"tenantId\": \"pg\",\n                            \"currentState\": \"REJECTED\",\n                            \"action\": \"REOPEN\",\n                            \"nextState\": \"PENDINGFORASSIGNMENT\",\n                            \"roles\": [\n                                \"CFC\",\n                                \"CSR\",\n                                \"CITIZEN\"\n                            ],\n                            \"active\": true\n                        },\n                        {\n                            \"tenantId\": \"pg\",\n                            \"currentState\": \"REJECTED\",\n                            \"action\": \"RATE\",\n                            \"nextState\": \"CLOSEDAFTERREJECTION\",\n                            \"roles\": [\n                                \"CFC\",\n                                \"CITIZEN\"\n                            ],\n                            \"active\": true\n                        }\n                    ]\n                },\n                {\n                    \"tenantId\": \"pg\",\n                    \"sla\": 300000,\n                    \"state\": \"RESOLVED\",\n                    \"applicationStatus\": \"RESOLVED\",\n                    \"docUploadRequired\": false,\n                    \"isStartState\": false,\n                    \"isTerminateState\": true,\n                    \"isStateUpdatable\": false,\n                    \"actions\": [\n                        {\n                            \"tenantId\": \"pg\",\n                            \"currentState\": \"RESOLVED\",\n                            \"action\": \"RATE\",\n                            \"nextState\": \"CLOSEDAFTERRESOLUTION\",\n                            \"roles\": [\n                                \"CFC\",\n                                \"CITIZEN\"\n                            ],\n                            \"active\": true\n                        },\n                        {\n                            \"tenantId\": \"pg\",\n                            \"currentState\": \"RESOLVED\",\n                            \"action\": \"REOPEN\",\n                            \"nextState\": \"PENDINGFORASSIGNMENT\",\n                            \"roles\": [\n                                \"CFC\",\n                                \"CSR\",\n                                \"CITIZEN\"\n                            ],\n                            \"active\": true\n                        },\n                        {\n                            \"tenantId\": \"pg\",\n                            \"currentState\": \"RESOLVED\",\n                            \"action\": \"COMMENT\",\n                            \"nextState\": \"RESOLVED\",\n                            \"roles\": [\n                                \"CITIZEN\"\n                            ],\n                            \"active\": true\n                        }\n                    ]\n                },\n                {\n                    \"tenantId\": \"pg\",\n                    \"sla\": null,\n                    \"state\": \"CLOSEDAFTERREJECTION\",\n                    \"applicationStatus\": \"CLOSEDAFTERREJECTION\",\n                    \"docUploadRequired\": false,\n                    \"isStartState\": false,\n                    \"isTerminateState\": true,\n                    \"isStateUpdatable\": false,\n                    \"actions\": null\n                },\n                {\n                    \"tenantId\": \"pg\",\n                    \"sla\": null,\n                    \"state\": \"CLOSEDAFTERRESOLUTION\",\n                    \"applicationStatus\": \"CLOSEDAFTERRESOLUTION\",\n                    \"docUploadRequired\": false,\n                    \"isStartState\": false,\n                    \"isTerminateState\": true,\n                    \"isStateUpdatable\": false,\n                    \"actions\": null\n                },\n                {\n                    \"tenantId\": \"pg\",\n                    \"sla\": 300000,\n                    \"state\": \"PENDINGATSUPERVISOR\",\n                    \"applicationStatus\": \"PENDINGATSUPERVISOR\",\n                    \"docUploadRequired\": false,\n                    \"isStartState\": false,\n                    \"isTerminateState\": false,\n                    \"isStateUpdatable\": false,\n                    \"actions\": [\n                        {\n                            \"tenantId\": \"pg\",\n                            \"currentState\": \"PENDINGATSUPERVISOR\",\n                            \"action\": \"RESOLVEBYSUPERVISOR\",\n                            \"nextState\": \"RESOLVEDBYSUPERVISOR\",\n                            \"roles\": [\n                                \"SUPERVISOR\"\n                            ],\n                            \"active\": true\n                        }\n                    ]\n                },\n                {\n                    \"tenantId\": \"pg\",\n                    \"sla\": null,\n                    \"state\": \"RESOLVEDBYSUPERVISOR\",\n                    \"applicationStatus\": \"RESOLVEDBYSUPERVISOR\",\n                    \"docUploadRequired\": false,\n                    \"isStartState\": false,\n                    \"isTerminateState\": true,\n                    \"isStateUpdatable\": false,\n                    \"actions\": null\n                },\n                {\n                    \"tenantId\": \"pg\",\n                    \"sla\": null,\n                    \"state\": \"CANCELLED\",\n                    \"applicationStatus\": \"CANCELLED\",\n                    \"docUploadRequired\": false,\n                    \"isStartState\": false,\n                    \"isTerminateState\": true,\n                    \"isStateUpdatable\": false,\n                    \"actions\": null\n                }\n            ]\n        }\n    ]\n}"
+						},
+						"url": {
+							"raw": "{{url}}/egov-workflow-v2/egov-wf/businessservice/_update",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"egov-workflow-v2",
+								"egov-wf",
+								"businessservice",
+								"_update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search Workflow",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "TENANTID",
+								"value": "in.stateb.tenantu",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    // Check query params of this request\n    \"RequestInfo\": {\n        \"apiId\": \"Rainmaker\",\n        \"action\": \"\",\n        \"did\": 1,\n        \"key\": \"\",\n        \"msgId\": \"20170310130900|en_IN\",\n        \"requesterId\": \"\",\n        \"ts\": 1513579888683,\n        \"ver\": \".01\",\n        // Auth token and userInfo comes directly from Employee Auth Token API\n        \"authToken\": \"{{authToken}}\",\n        \"userInfo\": {{userReqInfo}}\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/egov-workflow-v2/egov-wf/businessservice/_search?tenantId={{stateTenant}}&businessServices=PGR",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"egov-workflow-v2",
+								"egov-wf",
+								"businessservice",
+								"_search"
+							],
+							"query": [
+								{
+									"key": "tenantId",
+									"value": "{{stateTenant}}"
+								},
+								{
+									"key": "businessServices",
+									"value": "PGR"
+								},
+								{
+									"key": "business",
+									"value": "sw-services",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search Process Instance",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"RequestInfo\": {\n        \"apiId\": \"Rainmaker\",\n        \"action\": \"\",\n        \"did\": 1,\n        \"key\": \"\",\n        \"msgId\": \"20170310130900|en_IN\",\n        \"requesterId\": \"\",\n        \"ts\": 1513579888683,\n        \"ver\": \".01\",\n        // Auth token and userInfo comes directly from Employee Auth Token API\n        \"authToken\": \"{{authToken}}\",\n        \"userInfo\": {{userReqInfo}}\n    }\n}"
+						},
+						"url": {
+							"raw": "{{url}}/egov-workflow-v2/egov-wf/process/_search?tenantId={{cityTenant}}&businessIds=PG-AC-2023-05-22-000034",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"egov-workflow-v2",
+								"egov-wf",
+								"process",
+								"_search"
+							],
+							"query": [
+								{
+									"key": "tenantId",
+									"value": "{{cityTenant}}",
+									"description": "tenant id of application"
+								},
+								{
+									"key": "businessIds",
+									"value": "PG-AC-2023-05-22-000034",
+									"description": "Application id of which the search is required"
+								},
+								{
+									"key": "history",
+									"value": "true",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Employee Auth Token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();",
+							"",
+							"pm.collectionVariables.set(\"authToken\", jsonData.access_token);",
+							"",
+							"var userInfo, userReqInfo;",
+							"for (let key in jsonData) {",
+							"    if (key.includes('UserRequest')) {",
+							"        console.log(JSON.stringify(jsonData[key]));",
+							"        userInfo = JSON.stringify(jsonData[key])",
+							"    }",
+							"}",
+							"pm.collectionVariables.set(\"userReqInfo\", userInfo);",
+							"",
+							"pm.execution.setNextRequest(\"MDMSv2 PGR Search\");",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "authority",
+						"value": "upyog.niua.org"
+					},
+					{
+						"key": "accept",
+						"value": "application/json, text/plain, */*"
+					},
+					{
+						"key": "accept-language",
+						"value": "en-GB,en;q=0.9"
+					},
+					{
+						"key": "authorization",
+						"value": "Basic ZWdvdi11c2VyLWNsaWVudDo="
+					},
+					{
+						"key": "content-type",
+						"value": "application/x-www-form-urlencoded"
+					},
+					{
+						"key": "origin",
+						"value": "https://upyog.niua.org"
+					},
+					{
+						"key": "referer",
+						"value": "https://upyog.niua.org/employee/user/login"
+					},
+					{
+						"key": "sec-ch-ua",
+						"value": "\"Not?A_Brand\";v=\"8\", \"Chromium\";v=\"108\", \"Google Chrome\";v=\"108\""
+					},
+					{
+						"key": "sec-ch-ua-mobile",
+						"value": "?0"
+					},
+					{
+						"key": "sec-ch-ua-platform",
+						"value": "\"Linux\""
+					},
+					{
+						"key": "sec-fetch-dest",
+						"value": "empty"
+					},
+					{
+						"key": "sec-fetch-mode",
+						"value": "cors"
+					},
+					{
+						"key": "sec-fetch-site",
+						"value": "same-origin"
+					},
+					{
+						"key": "user-agent",
+						"value": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "username",
+							"value": "{{username}}",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "{{password}}",
+							"type": "text"
+						},
+						{
+							"key": "grant_type",
+							"value": "password",
+							"type": "text"
+						},
+						{
+							"key": "scope",
+							"value": "read",
+							"type": "text"
+						},
+						{
+							"key": "tenantId",
+							"value": "{{userLoginTenant}}",
+							"type": "text"
+						},
+						{
+							"key": "userType",
+							"value": "{{userType}}",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{url}}/user/oauth/token",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"user",
+						"oauth",
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Schema",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var Response = pm.response.json();",
+							"var schemaCode = Response.SchemaDefinitions[0].code",
+							"",
+							"",
+							"pm.collectionVariables.set(\"SchemaCode\", schemaCode);",
+							"if (schemaCode) {",
+							"    // Split the string by the dot in the middle",
+							"    let parts = schemaCode.split('.');",
+							"",
+							"    // Set each part as a new collection variable",
+							"    pm.collectionVariables.set(\"ModuleName\", parts[0]);",
+							"    pm.collectionVariables.set(\"MasterName\", parts[1]);",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"RequestInfo\": {\n        \"apiId\": \"asset-services\",\n        \"ver\": null,\n        \"ts\": null,\n        \"action\": null,\n        \"did\": null,\n        \"key\": null,\n        \"msgId\": \"search with from and to values\",\n        // Auth token and userInfo comes directly from Employee Auth Token API, run that and it will store the values to collection variables\n        \"authToken\": \"{{authToken}}\",\n        \"correlationId\": null,\n        \"userInfo\": {{userReqInfo}}\n    },\n    \"SchemaDefinition\": {\n        // Choose either cityTenant or stateTenant from collection variables\n        \"tenantId\": \"{{cityTenant}}\",\n        // code is the schema code, either add manually or choose collection bariable \"SchemaCode\"\n        \"code\": \"tenant.citymoduletest\",\n        \"description\": \"\",\n        \"isActive\": true,\n        // If user wants the schema to allow some additional adHoc fields to be stored in database, set \"additionalProperties\" in definition to true. \n        \"definition\": {\n            \"type\": \"object\",\n            \"title\": \"Generated schema for Root\",\n            \"$schema\": \"http://json-schema.org/draft-07/schema#\",\n            \"required\": [\n                \"module\",\n                \"code\",\n                \"active\",\n                \"order\",\n                \"tenants\"\n            ],\n            \"x-unique\": [\n                \"code\"\n            ],\n            \"properties\": {\n                \"code\": {\n                    \"type\": \"string\"\n                },\n                \"order\": {\n                    \"type\": \"number\"\n                },\n                \"active\": {\n                    \"type\": \"boolean\"\n                },\n                \"module\": {\n                    \"type\": \"string\"\n                },\n                \"tenants\": {\n                    \"type\": \"array\",\n                    \"items\": {\n                        \"type\": \"object\",\n                        \"required\": [\n                            \"code\"\n                        ],\n                        \"properties\": {\n                            \"code\": {\n                                \"type\": \"string\"\n                            }\n                        }\n                    }\n                }\n            },\n            \"x-ref-schema\": [],\n            \"additionalProperties\": false\n        }\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/mdms-v2/schema/v1/_create",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"mdms-v2",
+						"schema",
+						"v1",
+						"_create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Data",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"RequestInfo\": {\n        \"apiId\": \"asset-services\",\n        \"ver\": null,\n        \"ts\": null,\n        \"action\": null,\n        \"did\": null,\n        \"key\": null,\n        \"msgId\": \"search with from and to values\",\n        // Auth token and userInfo comes directly from Employee Auth Token API, run that and it will store the values to collection variables\n        \"authToken\": \"{{authToken}}\",\n        \"correlationId\": null,\n        \"userInfo\": {{userReqInfo}}\n    },\n    \"Mdms\": {\n        // Choose cityTenant or stateTenant (defined in collection variables\n        \"tenantId\": \"{{cityTenant}}\",\n        // Either add schema code manually or it fetches from collection variable. \n        \"schemaCode\": \"{{SchemaCode}}\",\n        // Provide the data object to be added to database below (only one object per request)\n        \"data\": {\n            \"head\": \"HR_ASSIGN_DET_HEADER\",\n            \"body\": [\n                {\n                    \"type\": \"component\",\n                    \"component\": \"Assignments\",\n                    \"key\": \"Assignments\",\n                    \"withoutLabel\": true\n                }\n            ]\n        },\n        \"isActive\": true\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/mdms-v2/v2/_create/{{SchemaCode}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"mdms-v2",
+						"v2",
+						"_create",
+						"{{SchemaCode}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Search Data V2",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"RequestInfo\": {\n        \"apiId\": \"asset-services\",\n        \"ver\": null,\n        \"ts\": null,\n        \"action\": null,\n        \"did\": null,\n        \"key\": null,\n        \"msgId\": \"search with from and to values\",\n        // Auth token and userInfo comes directly from Employee Auth Token API, run that and it will store the values to collection variables\n        \"authToken\": \"{{authToken}}\",\n        \"correlationId\": null,\n        \"userInfo\": {{userReqInfo}}\n    },\n    \"MdmsCriteria\": {\n        \"tenantId\": \"{{stateTenant}}\",\n        // Either enter SchemaCode manually or pick from collection variable which is updated based on Search Schema and Create Schema API\n        \"schemaCode\": \"{{SchemaCode}}\",\n        \"limit\": 1100\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/mdms-v2/v2/_search",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"mdms-v2",
+						"v2",
+						"_search"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Search Data V1",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"RequestInfo\": {\n        \"apiId\": \"asset-services\",\n        \"ver\": null,\n        \"ts\": null,\n        \"action\": null,\n        \"did\": null,\n        \"key\": null,\n        \"msgId\": \"search with from and to values\",\n        // Auth token and userInfo comes directly from Employee Auth Token API, run that and it will store the values to collection variables\n        \"authToken\": \"{{authToken}}\",\n        \"correlationId\": null,\n        \"userInfo\": {{userReqInfo}}\n    },\n    \"MdmsCriteria\": {\n        \"tenantId\": \"{{cityTenant}}\",\n        \"moduleDetails\": [\n            // if user needs to search data for two different modules within same request, just add another similar object in this array\n            {\n                \"moduleName\": \"{{ModuleName}}\",\n                \"masterDetails\": [\n                    // if user needs to search multiple master data within one module, just add another object in this array\n                    {\n                        \"name\": \"{{MasterName}}\",\n                        // Filter is optional, below is just and example\n                        \"filter\": \"[?(@.fee == 600 || @.fee == 1200)]\"\n                    },\n                    {\n                        \"name\": \"documentType\",\n                        \"filter\": \"[?(@.name == \\\"aadhar\\\")]\"\n                    }\n                ]\n            },\n            {\n                // Module two details need to be added here\n                \"moduleName\": \"{{ModuleName}}\",\n                \"masterDetails\": [\n                    {\n                        \"name\": \"{{MasterName}}\",\n                        // Module two's master data details needs to be added here\n                        \"filter\": \"[?(@.fee == 600 || @.fee == 1200)]\"\n                    },\n                    {\n                        // If another master needs to be fetched from same module\n                        \"name\": \"documentType\",\n                        \"filter\": \"[?(@.name == \\\"aadhar\\\")]\"\n                    }\n                ]\n            }\n        ]\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/mdms-v2/v1/_search",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"mdms-v2",
+						"v1",
+						"_search"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Search Schema",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var Response = pm.response.json();",
+							"var schemaCode = Response.SchemaDefinitions[0].code",
+							"",
+							"",
+							"pm.collectionVariables.set(\"SchemaCode\", schemaCode);",
+							"if (schemaCode) {",
+							"    // Split the string by the dot in the middle",
+							"    let parts = schemaCode.split('.');",
+							"",
+							"    // Set each part as a new collection variable",
+							"    pm.collectionVariables.set(\"ModuleName\", parts[0]);",
+							"    pm.collectionVariables.set(\"MasterName\", parts[1]);",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"RequestInfo\": {\n        \"apiId\": \"asset-services\",\n        \"ver\": null,\n        \"ts\": null,\n        \"action\": null,\n        \"did\": null,\n        \"key\": null,\n        \"msgId\": \"search with from and to values\",\n        // Auth token and userInfo comes directly from Employee Auth Token API, run that and it will store the values to collection variables\n        \"authToken\": \"{{authToken}}\",\n        \"correlationId\": null,\n        \"userInfo\": {{userReqInfo}}\n    },\n    \"SchemaDefCriteria\": {\n        \"tenantId\": \"{{stateTenant}}\",\n        \"codes\": [\n           \"tenant.citymoduletest\"\n        ]\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/mdms-v2/schema/v1/_search",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"mdms-v2",
+						"schema",
+						"v1",
+						"_search"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update data",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"RequestInfo\": {\n        \"apiId\": \"asset-services\",\n        \"ver\": null,\n        \"ts\": null,\n        \"action\": null,\n        \"did\": null,\n        \"key\": null,\n        \"msgId\": \"search with from and to values\",\n        // Auth token and userInfo comes directly from Employee Auth Token API\n        \"authToken\": \"{{authToken}}\",\n        \"correlationId\": null,\n        \"userInfo\": {{userReqInfo}}\n    },\n    \"Mdms\": {\n        // In update request, the data needs to be copied from Search Data V2 call and edit the details that need updation\n        \"tenantId\": \"{{stateTenant}}\",\n        \"schemaCode\": \"{{SchemaCode}}\",\n        // enter UUID and unique identifier of data object\n        \"id\": \"723a0624-fa87-422a-89c0-46b8f6e7f502\",\n        \"uniqueIdentifier\": \"2630\",\n        \"data\": {\n            // Sample data\n            \"code\": \"null\",\n            \"enabled\": true\n        },\n        \"isActive\": true,\n        // Audit details is mandatory\n        \"auditDetails\": {\n            \"createdBy\": \"33742354-6df9-4ef3-8656-911d616b6908\",\n            \"lastModifiedBy\": \"33742354-6df9-4ef3-8656-911d616b6908\",\n            \"createdTime\": 1752660978978,\n            \"lastModifiedTime\": 1752660978978\n        }\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/mdms-v2/v2/_create/{{SchemaCode}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"mdms-v2",
+						"v2",
+						"_create",
+						"{{SchemaCode}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "url",
+			"value": "https://pgr-demo.digit.org",
+			"type": "string"
+		},
+		{
+			"key": "username",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "password",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "userLoginTenant",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "cityTenant",
+			"value": "statea.citya",
+			"type": "string"
+		},
+		{
+			"key": "userType",
+			"value": "EMPLOYEE",
+			"type": "string"
+		},
+		{
+			"key": "stateTenant",
+			"value": "statea",
+			"type": "string"
+		}
+	]
+}

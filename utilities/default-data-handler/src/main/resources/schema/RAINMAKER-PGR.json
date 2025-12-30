@@ -1,0 +1,81 @@
+[
+  {
+    "tenantId": "{tenantid}",
+    "code": "RAINMAKER-PGR.ServiceDefs",
+    "description": "RAINMAKER-PGR.ServiceDefs",
+    "isActive": true,
+    "definition": {
+      "type": "object",
+      "title": "Generated schema for Root",
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "required": [
+        "serviceCode",
+        "name",
+        "keywords",
+        "department",
+        "slaHours",
+        "active",
+        "menuPath",
+        "menuPathName"
+      ],
+      "x-unique": [
+        "serviceCode"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "order": {
+          "type": "number"
+        },
+        "active": {
+          "type": "boolean"
+        },
+        "keywords": {
+          "type": "string"
+        },
+        "menuPath": {
+          "type": "string"
+        },
+        "slaHours": {
+          "type": "number"
+        },
+        "department": {
+          "type": "string"
+        },
+        "serviceCode": {
+          "type": "string"
+        },
+        "menuPathName": {
+          "type": "string"
+        }
+      },
+      "x-ref-schema": [],
+      "additionalProperties": false
+    }
+  },
+  {
+    "tenantId": "{tenantid}",
+    "code": "RAINMAKER-PGR.UIConstants",
+    "description": "RAINMAKER-PGR.UIConstants",
+    "isActive": true,
+    "definition": {
+      "type": "object",
+      "title": "Generated schema for Root",
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "required": [
+        "REOPENSLA"
+      ],
+      "x-unique": [
+        "REOPENSLA"
+      ],
+      "properties": {
+        "REOPENSLA": {
+          "type": "number"
+        }
+      },
+      "x-ref-schema": [],
+      "additionalProperties": false
+    }
+  }
+]

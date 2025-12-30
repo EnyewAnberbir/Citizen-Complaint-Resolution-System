@@ -1,0 +1,252 @@
+[
+  {
+    "tenantId": "{tenantid}",
+    "code": "tenant.citymodule",
+    "description": "tenant.citymodule",
+    "isActive": true,
+    "definition": {
+      "type": "object",
+      "title": "Generated schema for Root",
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "required": [
+        "module",
+        "code",
+        "active",
+        "order",
+        "tenants"
+      ],
+      "x-unique": [
+        "code"
+      ],
+      "properties": {
+        "code": {
+          "type": "string"
+        },
+        "order": {
+          "type": "number"
+        },
+        "active": {
+          "type": "boolean"
+        },
+        "module": {
+          "type": "string"
+        },
+        "tenants": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "code"
+            ],
+            "properties": {
+              "code": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "x-ref-schema": [],
+      "additionalProperties": false
+    }
+  },
+  {
+    "tenantId": "{tenantid}",
+    "code": "tenant.tenants",
+    "description": "tenant.tenants",
+    "isActive": true,
+    "definition": {
+      "type": "object",
+      "title": "Generated schema for Root",
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "required": [
+        "code",
+        "name",
+        "domainUrl",
+        "type",
+        "imageId",
+        "emailId",
+        "OfficeTimings",
+        "city",
+        "address",
+        "contactNumber"
+      ],
+      "x-unique": [
+        "code"
+      ],
+      "properties": {
+        "city": {
+          "type": "object",
+          "required": [
+            "name",
+            "districtName",
+            "districtTenantCode",
+            "ulbGrade",
+            "code"
+          ],
+          "properties": {
+            "code": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "captcha": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "ddrName": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "latitude": {
+              "type": "number"
+            },
+            "ulbGrade": {
+              "type": "string"
+            },
+            "blockCode": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "localName": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "longitude": {
+              "type": "number"
+            },
+            "regionName": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "districtCode": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "districtName": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "shapeFileLocation": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "districtTenantCode": {
+              "type": "string"
+            }
+          }
+        },
+        "code": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "logoId": {
+          "type": "string"
+        },
+        "address": {
+          "type": "string"
+        },
+        "emailId": {
+          "type": "string"
+        },
+        "imageId": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "pincode": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          }
+        },
+        "domainUrl": {
+          "type": "string"
+        },
+        "centreType": {
+          "type": "string"
+        },
+        "twitterUrl": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "description": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "facebookUrl": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "OfficeTimings": {
+          "type": "object",
+          "required": [
+            "Mon - Fri"
+          ],
+          "properties": {
+            "Sat": {
+              "type": "string"
+            },
+            "Mon - Fri": {
+              "type": "string"
+            }
+          }
+        },
+        "contactNumber": {
+          "type": "string"
+        },
+        "helpLineNumber": {
+          "type": "string"
+        }
+      },
+      "x-ui-schema": {
+        "ui:order": [
+          "code",
+          "name",
+          "type",
+          "logoId",
+          "emailId",
+          "imageId",
+          "address",
+          "domainUrl",
+          "twitterUrl",
+          "facebookUrl",
+          "description",
+          "contactNumber",
+          "helpLineNumber",
+          "city",
+          "OfficeTimings"
+        ]
+      }
+    }
+  }
+]
