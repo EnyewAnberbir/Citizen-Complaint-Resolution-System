@@ -54,7 +54,7 @@ module.exports = {
   },
   plugins: [
     new webpack.ProvidePlugin({
-      process: "process/browser",
+      process: "process/browser.js",
     }),
     new webpack.DefinePlugin(envKeys),
     new CleanWebpackPlugin(),
@@ -70,8 +70,9 @@ module.exports = {
     modules: [path.resolve(__dirname, "src"), "node_modules"],
     extensions: [".js", ".jsx", ".ts", ".tsx"],
     preferRelative: true,
+    fullySpecified: false,
     fallback: {
-      process: require.resolve("process/browser"),
+      process: require.resolve("process/browser.js"),
     },
   },
   devServer: {

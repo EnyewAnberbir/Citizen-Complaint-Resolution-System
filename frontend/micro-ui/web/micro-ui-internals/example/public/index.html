@@ -18,7 +18,9 @@
   <!-- <link rel="stylesheet" href="https://unpkg.com/@egovernments/digit-ui-health-css@0.2.51/dist/index.css" /> -->
   <!-- <link rel="stylesheet" href="https://unpkg.com/@egovernments/digit-ui-components-css@0.2.0/dist/index.css" /> -->
 
-  <script src="%REACT_APP_GLOBAL%"></script>
+  <% if (htmlWebpackPlugin.options.templateParameters && htmlWebpackPlugin.options.templateParameters.REACT_APP_GLOBAL) { %>
+  <script src="<%= htmlWebpackPlugin.options.templateParameters.REACT_APP_GLOBAL %>"></script>
+  <% } %>
   <script>
     // DOM Override for Profile Page
     (function () {

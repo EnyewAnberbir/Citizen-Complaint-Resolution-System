@@ -12,9 +12,23 @@ import { pgrCustomizations, pgrComponents } from "./pgr";
 window.Digit = window.Digit || {};
 window.Digit.Hooks = Hooks;
 
+// Initialize globalConfigs if not loaded from external script
+if (!window.globalConfigs) {
+  window.globalConfigs = {
+    getConfig: (key) => {
+      const configs = {
+        "CONTEXT_PATH": "digit-ui",
+        "STATE_LEVEL_TENANT_ID": "pb",
+        "LOCALE": "en_IN",
+      };
+      return configs[key];
+    }
+  };
+}
+
 const DigitUILazy = lazy(() => import("@egovernments/digit-ui-module-core").then((module) => ({ default: module.DigitUI })));
 
-const enabledModules = ["Utilities", "PGR", "Workbench", "HRMS"];
+const enabledModules = ["Utilities", "PGR"];
 
 const initTokens = (stateCode) => {
   const userType = window.sessionStorage.getItem("userType") || process.env.REACT_APP_USER_TYPE || "CITIZEN";
@@ -43,16 +57,45 @@ const initTokens = (stateCode) => {
   }
 };
 
-const initDigitUI = () => {
+const waitForGlobalConfigs = () => {
+  return new Promise((resolve) => {
+    if (window.globalConfigs) {
+      resolve();
+    } else {
+      const checkInterval = setInterval(() => {
+        if (window.globalConfigs) {
+          clearInterval(checkInterval);
+          resolve();
+        }
+      }, 100);
+      
+      // Timeout after 5 seconds and resolve anyway
+      setTimeout(() => {
+        clearInterval(checkInterval);
+        console.warn("Global configs not loaded, using defaults");
+        resolve();
+      }, 5000);
+    }
+  });
+};
+
+const initDigitUI = async () => {
+  // Wait for global configs to load
+  await waitForGlobalConfigs();
+  
   window.contextPath = window?.globalConfigs?.getConfig("CONTEXT_PATH") || "digit-ui";
 
   window.Digit.Customizations = {
     commonUiConfig: UICustomizations,
     PGR: pgrCustomizations,
   };
-  window?.Digit.ComponentRegistryService.setupRegistry({
-    ...pgrComponents,
-  });
+  
+  // Setup component registry if available
+  if (window?.Digit?.ComponentRegistryService?.setupRegistry) {
+    window.Digit.ComponentRegistryService.setupRegistry({
+      ...pgrComponents,
+    });
+  }
 
   const stateCode = window?.globalConfigs?.getConfig("STATE_LEVEL_TENANT_ID") || "pb";
   const root = ReactDOM.createRoot(document.getElementById("root"));
@@ -76,20 +119,21 @@ const MainApp = ({ stateCode, enabledModules }) => {
       initUtilitiesComponents();
       initPGRComponents();
 
-      // Initialize workbench and HRMS if available
-      try {
-        const { initWorkbenchComponents } = await import("@egovernments/digit-ui-module-workbench");
-        initWorkbenchComponents();
-      } catch (e) {
-        console.warn("Workbench module not available:", e);
-      }
+      // Workbench and HRMS modules disabled due to dependency issues
+      // try {
+      //   const { initWorkbenchComponents } = await import("@egovernments/digit-ui-module-workbench");
+      //   initWorkbenchComponents();
+      // } catch (e) {
+      //   console.warn("Workbench module not available:", e);
+      // }
 
-      try {
-        const { initHRMSComponents } = await import("@egovernments/digit-ui-module-hrms");
-        initHRMSComponents();
-      } catch (e) {
-        console.warn("HRMS module not available:", e);
-      }
+      // HRMS module disabled due to dependency issues
+      // try {
+      //   const { initHRMSComponents } = await import("@egovernments/digit-ui-module-hrms");
+      //   initHRMSComponents();
+      // } catch (e) {
+      //   console.warn("HRMS module not available:", e);
+      // }
 
       setIsReady(true);
     });

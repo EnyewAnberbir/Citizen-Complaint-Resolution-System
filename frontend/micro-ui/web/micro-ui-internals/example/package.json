@@ -9,27 +9,30 @@
     "start:old": "react-scripts start"
   },
   "peerDependencies": {
+    "@tanstack/react-query": "^5.62.16",
     "react": "19.0.0",
     "react-dom": "19.0.0",
-    "react-router-dom": "6.25.1",
-    "@tanstack/react-query": "^5.62.16"
+    "react-router-dom": "6.25.1"
   },
   "devDependencies": {
-    "@egovernments/digit-ui-libraries": "1.8.17-rc19.01",
-    "@egovernments/digit-ui-module-core": "1.8.35-rc19.01",
+    "@babel/plugin-proposal-optional-chaining": "^7.21.0",
     "@egovernments/digit-ui-components": "0.2.0-beta.40-rc19.01",
-    "@egovernments/digit-ui-react-components": "1.8.21-rc19.01",
-    "@egovernments/digit-ui-module-utilities": "1.0.12",
+    "@egovernments/digit-ui-libraries": "1.8.17-rc19.01",
     "@egovernments/digit-ui-module-ccrs": "0.0.1",
-    "@egovernments/digit-ui-module-workbench": "1.0.28",
+    "@egovernments/digit-ui-module-core": "1.8.35-rc19.01",
     "@egovernments/digit-ui-module-hrms": "1.9.2",
+    "@egovernments/digit-ui-module-utilities": "1.0.12",
+    "@egovernments/digit-ui-module-workbench": "1.0.28",
+    "@egovernments/digit-ui-react-components": "1.8.21-rc19.01",
+    "clean-webpack-plugin": "^4.0.0",
+    "dotenv-webpack": "^8.0.0",
+    "html-webpack-plugin": "^5.6.5",
     "http-proxy-middleware": "^1.0.5",
     "react-i18next": "15.0.0",
     "react-router-dom": "6.25.1",
     "webpack": "^5.97.1",
     "webpack-cli": "^6.0.1",
-    "webpack-dev-server": "^5.2.0",
-    "dotenv-webpack": "^8.0.0"
+    "webpack-dev-server": "^5.2.0"
   },
   "browserslist": {
     "production": [
@@ -42,5 +45,14 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "dependencies": {
+    "@babel/core": "^7.28.5",
+    "@babel/preset-env": "^7.28.5",
+    "@babel/preset-react": "^7.28.5",
+    "date-fns": "2.30.0",
+    "i18next": "^25.7.3",
+    "jsonpath": "^1.1.1",
+    "process": "^0.11.10"
   }
 }
